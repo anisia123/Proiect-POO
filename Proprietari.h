@@ -44,6 +44,7 @@ public:
     const string& getNume() const { return nume; }
     double getPlata() const { return sumaPlata; }
     bool getUrgenta() const { return urgenta; }
+    const Animal& getAnimal() const { return animal; }
 
     // --- setters ---
     void setNume(const string& numeNou) {
@@ -57,21 +58,21 @@ public:
         cout << "~Proprietar() a fost apelat.\n";
     }
 
-    int* gasireProceduriAnimal() {
-        return animal.getIstoric(); // mult mai curat!
+    const vector<int>& gasireProceduriAnimal() const {
+        return animal.getIstoric();
     }
 
-    int gasireNrProceduri() {
+    int gasireNrProceduri() const {
         return animal.getNrProc();
     }
 
     void CalcSumaPlata() {
         double plataNoua = 0.0;
         int nrProcAnimal = gasireNrProceduri();
-        int* istoricCpy = gasireProceduriAnimal();
+        const vector<int>& istoricCpy = gasireProceduriAnimal();
         int nrListaProc = Procedura::getNrProceduriCreate();
 
-        if (istoricCpy != nullptr && nrListaProc > 0) {
+        if (!istoricCpy.empty() && nrListaProc > 0) {
             for (int i = 0; i < nrProcAnimal; ++i) {
                 for (int j = 0; j < nrListaProc; ++j) {
                     const Procedura& proc = Procedura::getProceduraByIndex(j);
