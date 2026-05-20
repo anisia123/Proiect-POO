@@ -1,0 +1,88 @@
+
+Proiectul 3 - Programare Orientată pe Obiecte
+Facultatea de Matematică şi Informatică
+Grupele 141 şi 144
+Obiectiv
+Integrarea conceptelor de excepţii, template-uri, STL, std::string şi Design Patterns într-o aplicaţie C++ completă, conform materiei studiate în Laboratoarele 6, 7 şi 8.
+Studenţii au la dispoziţie două variante, dintre care trebuie aleasă una:
+Varianta A: Extinderea Proiectului 2
+Aplicaţia realizată în Proiectul 2 se extinde cu toate conceptele din Laboratoarele 6-8. Toate cerinţele obligatorii ale Proiectelor 1 şi 2 (încapsulare, constructori, destructor virtual, moştenire, clase abstracte, polimorfism, dynamic_cast etc.) rămân valabile şi trebuie să fie prezente în codul predat. Colecţiile gestionate cu tablouri alocate dinamic (new[]) se vor înlocui cu containere STL.
+Varianta B: Aplicaţie nouă de la zero
+Se realizează o aplicaţie complet nouă, pentru un domeniu ales de student (ex.: bibliotecă, spital, magazin online, sistem de rezervări, joc etc.). Aplicaţia trebuie să respecte toate cerinţele obligatorii din Proiectele 1 şi 2 (încapsulare, ierarhie de moştenire, clasă abstractă, polimorfism, destructor virtual, dynamic_cast) plus toate cerinţele obligatorii ale Proiectului 3 de mai jos. Domeniul ales trebuie menţionat în README.txt împreună cu o scurtă descriere a ierarhiei de clase.
+Indiferent de variantă, toate cerinţele obligatorii de mai jos trebuie satisfăcute integral.
+
+Cerinţe obligatorii
+1. Excepţii custom şi gestionarea erorilor prin excepţii
+Aplicaţia (extinsă sau nouă) trebuie să renunţe complet la codurile de retur pentru semnalarea erorilor şi să utilizeze exclusiv mecanismul throw/try/catch.
+Cerinţe:
+Implementaţi o ierarhie proprie de excepţii cu minimum 3 clase, moştenind din std::exception sau din subclasele sale standard (std::runtime_error, std::logic_error etc.). Fiecare excepţie trebuie să suprascrie what() cu noexcept override şi să conţină câmpuri specifice domeniului (ex.: valoarea invalidă, id-ul afectat, limita depăşită).
+Toate metodele care pot eşua (constructori, setteri, operaţii CRUD) trebuie să arunce excepţii adecvate în loc să returneze coduri de eroare sau să afiseze mesaje direct.
+Demonstraţi stack unwinding: creaţi cel puţin un obiect cu resurse (mesaj în destructor) în interiorul unui bloc try şi verificaţi că destructorul este apelat corect la propagarea excepţiei.
+Destructorii tuturor claselor trebuie marcați noexcept (implicit sau explicit) şi nu trebuie să arunce nicio excepţie.
+Utilizaţi multiple blocuri catch: prindeţi mai întâi excepţiile derivate, apoi cele din bază, iar ca ultim resort catch(...).
+2. Funcţii şi clase template
+Aplicaţia trebuie să conţină minimum o clasă template şi minimum două funcţii template, utilizate în mod real în logica aplicaţiei (nu doar ca demonstraţii izolate).
+Cerinţe:
+Clasă template generică (ex.: Depozitar<T>, Colectie<T, N>, Rezultat<T>) parametrizată cu cel puţin un tip. Clasa trebuie să gestioneze resurse (alocare/dealocare) şi să integreze excepţii (overflow_error, underflow_error etc.) la operaţiile sale.
+Minimum o metodă template în interiorul clasei template (parametru de tip independent de cel al clasei, ex.: metodă de conversie sau copiere între tipuri diferite).
+Minimum două funcţii template libere cu deducere automată de tip, folosite practic în aplicație (ex.: funcţie de sortare generică, funcţie de căutare generică, funcţie de transformare).
+Cel puţin o specializare totală a unei funcţii sau clase template pentru un tip specific, cu justificare în comentarii.
+Demonstraţi utilizarea unui parametru non-tip (ex.: template<typename T, int N>) pentru a fixa dimensiunea unei colecţii la compilare.
+3. Containere şi algoritmi STL
+Toate colecţiile de obiecte din aplicaţie trebuie migrate de la tablouri alocate dinamic la containere STL adecvate, alese şi justificate pentru fiecare caz de utilizare.
+Cerinţe:
+Utilizaţi minimum 3 tipuri diferite de containere STL (vector, list, map/unordered_map, set, stack, queue, deque etc.), fiecare ales în funcţie de complexitatea operaţiilor necesare. Justificaţi alegerea fiecărui container în comentarii (O-notaţie).
+Utilizaţi minimum 5 algoritmi diferiţi din <algorithm> cu lambda-uri: find_if, sort, count_if, remove_if/erase, for_each, transform, any_of/all_of/none_of, copy_if etc.
+Implementaţi CRUD complet (Create, Read, Update, Delete) folosind containere STL şi algoritmi, cu excepţii pentru erorile posibile (element negasit, duplicat, capacitate depăşită etc.).
+Demonstraţi idioma erase-remove_if pentru vector şi remove_if membră pentru list.
+Utilizaţi std::pair sau structured bindings (auto [k, v]) acolo unde returnaţi sau iteraţi perechi de valori.
+4. Migrarea la std::string
+Toate câmpurile de tip char* sau char[] din clasele proiectului trebuie migrate la std::string.
+Cerinţe:
+Inlocuiți toate câmpurile char*/char[] cu std::string şi eliminaţi codul manual de gestionare a memoriei aferent (ex.: new char[], strcpy, delete []).
+Demonstraţi că migrarea la std::string elimină necesitatea scrierii manuale a constructorului de copiere, operator= şi destructorului pentru siruri (Rule of Three simplificat).
+Utilizaţi metodele std::string în logică reală: find, substr, replace, to_string, stoi/stod, empty, size.
+Utilizaţi std::ostringstream sau operatorul + pentru construirea mesajelor de excepţie şi a metodelor toString().
+5. Interfaţa IObject şi identificatori unici
+Clasele din ierarhia principală trebuie să implementeze o interfaţă IObject similară celei din Laboratorul 7.
+Cerinţe:
+IObject trebuie să conţină: contor static pentru generarea de id-uri unice, getId() const noexcept, metodă pur virtuală toString() const, operator (friend) apelat polimorfic şi operator== pe bază de id.
+Toate clasele concrete din ierarhia aplicaţiei trebuie să moştenească (direct sau indirect) din IObject şi să implementeze toString() folosind std::string.
+6. Design Pattern: Singleton
+Aplicaţia trebuie să conţină cel puţin un Singleton implementat în varianta Meyers (variabila locală static în getInstance()).
+Cerinţe:
+Singleton-ul trebuie să joace un rol real în aplicaţie (ex.: Logger, Configuratie, Registry de obiecte, NotificareManager).
+Constructorul, constructorul de copiere şi operator trebuie dezactivate explicit cu = delete.
+Demonstraţi în main că nu se pot crea două instanţe (prin comentariu sau eroare de compilare comentată).
+Singleton-ul trebuie să fie integrat cu restul aplicaţiei: min. 3 clase sau operaţii să-l apeleze automat (ex.: constructorii claselor de domeniu loghează prin Singleton).
+7. Design Pattern: Abstract Factory
+Aplicaţia trebuie să conţină un Abstract Factory cu minimum două familii de produse concrete şi două tipuri de produse per familie.
+Cerinţe:
+Definiţi minimum 2 interfeţe de produs abstracte şi câte 2 implementări concrete per interfaţă (câte una per familie).
+Definiţi fabrica abstractă cu metodele factory corespunzătoare şi minimum 2 fabrici concrete.
+Clientul (clasa care foloseşte fabrica) trebuie să primească fabrica prin dependency injection (constructor sau parametru de funcţie) şi să lucreze exclusiv cu interfeţele abstracte, fără a cunoaşte tipurile concrete.
+Demonstraţi în main că schimbarea familiei se face printr-o singură modificare (înlocuirea fabricii).
+8. Extinderea meniului interactiv
+Meniul CRUD din Proiectele 1 şi 2 trebuie extins pentru a acoperi funcţionalităţile noi:
+Opţiuni de filtrare şi sortare a colecţiei principale (cu algoritmi STL şi lambda-uri).
+Opţiune de selectare a canalului/familiei la runtime (demonstrand Abstract Factory).
+Toate erorile din meniu tratate prin try/catch, cu mesaje clare şi revenire la meniu (fără crash).
+Opţiune de afişare a jurnalului (demonstrand Singleton-ul Logger).
+
+Cerinţe suplimentare (bonus)
+Implementarea clasei template Rezultat<T> (similar cu std::expected din C++23): încapsulează fie o valoare, fie un mesaj de eroare, cu metode ok(), get(), getEroare() şi o metodă template transforma(F).
+Implementarea unui al treilea Design Pattern creational sau structural (ex.: Builder, Prototype, Decorator), cu justificarea alegerii în README.txt.
+Utilizarea std::initializer_list<T> pentru iniţializarea colecţiilor cu sintaxă cu acolade.
+Utilizarea parametrilor non-tip în clasa template pentru a crea structuri de date cu dimensiune fixă pe stivă (fără new).
+Interfaţă grafică (ex.: ImGUI) sau conectare la bază de date.
+
+Condiţii eliminatorii
+NECOMPILAREA PROIECTULUI DUCE LA NOTAREA PROIECTULUI CU NOTA 1.
+LIPSA IERARHIEI DE EXCEPŢII CUSTOM SAU UTILIZAREA CODURILOR DE RETUR ÎN LOC DE EXCEPŢII DUCELA NOTAREA PROIECTULUI CU NOTA 1.
+LIPSA CLASEI TEMPLATE SAU A CONTAINERELOR STL DUCE LA NOTAREA PROIECTULUI CU ΝΟΤΑ 1.
+Proiectul va fi verificat printr-un flux automatizat şi prin cross-evaluation pe sursele predate.
+Dacă în timpul rulării programul:
+Produce Undefined Behaviour (ex.: excepţie aruncata dintr-un destructor în timpul stack unwinding, accesarea unui container gol fără verificare).
+Are funcţionalităţi greşit implementate.
+Are funcţionalităţi care eşuează la execuţie.
+se poate acorda punctaj parţial sau penalizare majoră.
